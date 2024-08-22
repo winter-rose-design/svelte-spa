@@ -2,21 +2,13 @@
 	export const metadata = $state({
 		title: 'Index',
 	});
-
-	export async function load(params) {
-		return {
-			name: 'Svelte 5',
-		};
-	}
 </script>
 
 <script>
 	let props = $props();
-
-	metadata.title = 'Hi';
 </script>
 
-<h1>{props?.data?.name}</h1>
+<h1>Index</h1>
 
 <ul>
 	<li>

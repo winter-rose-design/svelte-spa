@@ -11,7 +11,6 @@
 
 	const router = navaid('/', async (uri) => {
 		const { default: component } = await import('./errors/404.svelte');
-
 		state = { component };
 	});
 
@@ -30,13 +29,10 @@
 		router.on(path, (params) => {
 			const navigate = async (params) => {
 				try {
-					const { metadata, load, default: component } = await module();
-					const data = await load?.(params);
-
-					state = { component, params, data, metadata };
+					const { metadata, default: component } = await module();
+					state = { component, params, metadata };
 				} catch (error) {
 					const { default: component } = await import('./errors/500.svelte');
-
 					state = { component };
 				}
 			};
