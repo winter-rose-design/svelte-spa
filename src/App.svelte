@@ -17,7 +17,7 @@
 	const routes = Object.entries(import.meta.glob('@/routes/**/*.svelte')).map(([path, module]) => {
 		const [, match] = /routes(.+)\.svelte$/.exec(path);
 
-		path = match.replace('/index', '').replace('@', ':');
+		path = match.toLowerCase().replace('/index', '').replace('@', ':');
 
 		return {
 			module,
