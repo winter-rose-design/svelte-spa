@@ -29,8 +29,8 @@
 		router.on(path, (params) => {
 			const navigate = async (params) => {
 				try {
-					const { metadata, default: component } = await module();
-					state = { component, params, metadata };
+					const { metadata, load, default: component } = await module();
+					state = { component, params, metadata, data: await load?.(params) };
 				} catch (error) {
 					const { default: component } = await import('./errors/500.svelte');
 					state = { component };
