@@ -8,6 +8,6 @@
 
 <div>
 	<main>
-		<slot></slot>
+		{@render props.children()}
 	</main>
 </div>
