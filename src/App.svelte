@@ -1,51 +1,52 @@
 <script>
+	import "./app.css";
 	import navaid from 'navaid';
 	import MainLayout from '@/layouts/MainLayout.svelte';
-
+	
 	let state = $state({
-		data: null,
-		params: null,
-		metadata: null,
-		component: null,
+	    data: null,
+	    params: null,
+	    metadata: null,
+	    component: null,
 	});
-
+	
 	const router = navaid('/', async (uri) => {
-		const { default: component } = await import('./errors/404.svelte');
-		state = { component };
+	    const { default: component } = await import('./errors/404.svelte');
+	    state = { component };
 	});
-
+	
 	const routes = Object.entries(import.meta.glob('@/routes/**/*.svelte')).map(([path, module]) => {
-		const [, match] = /routes(.+)\.svelte$/.exec(path);
-
-		path = match.toLowerCase().replace('/index', '').replace('@', ':');
-
-		return {
-			module,
-			path: path === '' ? '/' : path,
-		};
+	    const [, match] = /routes(.+)\.svelte$/.exec(path);
+	
+	    path = match.toLowerCase().replace('/index', '').replace('@', ':');
+	
+	    return {
+	        module,
+	        path: path === '' ? '/' : path,
+	    };
 	});
-
+	
 	for (const { path, module } of routes) {
-		router.on(path, (params) => {
-			const navigate = async (params) => {
-				try {
-					const { metadata, load, default: component } = await module();
-					state = { component, params, metadata, data: await load?.(params) };
-				} catch (error) {
-					const { default: component } = await import('./errors/500.svelte');
-					state = { component };
-				}
-			};
-
-			if (!document.startViewTransition) {
-				navigate(params);
-				return;
-			}
-
-			document.startViewTransition(() => navigate(params));
-		});
+	    router.on(path, (params) => {
+	        const navigate = async (params) => {
+	            try {
+	                const { metadata, load, default: component } = await module();
+	                state = { component, params, metadata, data: await load?.(params) };
+	            } catch (error) {
+	                const { default: component } = await import('./errors/500.svelte');
+	                state = { component };
+	            }
+	        };
+	
+	        if (!document.startViewTransition) {
+	            navigate(params);
+	            return;
+	        }
+	
+	        document.startViewTransition(() => navigate(params));
+	    });
 	}
-
+	
 	router.listen();
 </script>
 
